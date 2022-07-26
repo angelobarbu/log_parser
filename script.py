@@ -3,7 +3,7 @@ import zipfile
 from io import BytesIO
 import os
 
-os.chdir("C:\\Users\\angebarb\\Desktop\\New folder")
+os.chdir("C:\\Users\\angebarb\\Desktop\\mic_script")
 
 with zipfile.ZipFile("diagnostics.zip", "r") as diagnostics:
     for archive_name in diagnostics.namelist():
