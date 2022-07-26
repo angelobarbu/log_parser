@@ -13,17 +13,15 @@ with zipfile.ZipFile("diagnostics.zip", "r") as diagnostics:
         if re.search(r'\.zip$', archive_name) != None: 
             archive_data = BytesIO(diagnostics.read(archive_name))
             with zipfile.ZipFile(archive_data) as archive:
-                # Selects and extracts the .log files
+                # Selects and extracts the .log files to 'logs' folder
                 files = [file_name for file_name in archive.namelist() if file_name.endswith('.log')]
                 for file_name in files:
                     archive.extract(file_name, 'logs')
 
-
+# Loads the extracted logs from 'logs' folder
 logs_folder = os.path.join(os.getcwd(), 'logs')
 
-#print(len(list(os.walk(logs_folder))))
-
-# Takes each log file and adds to logs list
+# Takes each log file and appends to a logs list
 logs = []
 for root, folders, files in os.walk(logs_folder):
     for file in files:
@@ -31,5 +29,12 @@ for root, folders, files in os.walk(logs_folder):
         with open(path) as content:
             logs.append(content.read())
 
-print(len(logs))
-#print(type(logs))
+# Writes all logs to a dummy .log file and removes the prev dummy
+if os.path.exists('living_hell.log'):
+    os.remove('living_hell.log')
+
+log_file = open('living_hell.log', 'a')
+
+for i in range(len(logs)):
+    log_file.write(logs[i])
+    log_file.write('\n')
